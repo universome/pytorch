@@ -1,9 +1,8 @@
 # mypy: allow-untyped-defs
 import dataclasses
 import sys
-from collections import namedtuple
 from enum import Enum
-from typing import Callable, Optional, Tuple
+from typing import Callable, Optional
 
 import sympy
 
@@ -779,7 +778,7 @@ inline void {{kernel_name}}_transpose_b_kernel(
         assert hasattr(extra_config, "expand_n")
         if not hasattr(extra_config, "internal_block_m"):
             extra_config.internal_block_m = 4
-        if not  hasattr(extra_config, "internal_block_n"):
+        if not hasattr(extra_config, "internal_block_n"):
             extra_config.internal_block_n = 4
 
         self.extra_config.internal_block_m = min(
@@ -801,7 +800,11 @@ inline void {{kernel_name}}_transpose_b_kernel(
             "restrict_keyword": get_restrict_keyword(),
             **self.get_common_options(),
         }
-        if hasattr(self, "extra_config") and hasattr(self.extra_config, "trans_b") and self.extra_config.trans_b:
+        if (
+            hasattr(self, "extra_config")
+            and hasattr(self.extra_config, "trans_b")
+            and self.extra_config.trans_b
+        ):
             options.update(
                 {
                     "trans_b": self.extra_config.trans_b,
@@ -812,7 +815,11 @@ inline void {{kernel_name}}_transpose_b_kernel(
         result = KernelTemplate._template_from_string(self.TEMPLATE_KERNEL).render(
             options
         )
-        if hasattr(self, "extra_config") and hasattr(self.extra_config, "expand_n") and self.extra_config.expand_n:
+        if (
+            hasattr(self, "extra_config")
+            and hasattr(self.extra_config, "expand_n")
+            and self.extra_config.expand_n
+        ):
             options.update(
                 {
                     "expand_n": self.extra_config.expand_n,
